@@ -6,10 +6,12 @@ import morgan from 'morgan';
 
 import authRouter from './routes/auth';
 import dbConnection from './config/db';
+import seed from './seed-db/index';
 
 const app = express();
 
 dbConnection.once('open', function () {
+  seed();
   console.log('MongoDB database connection established successfully');
 });
 
