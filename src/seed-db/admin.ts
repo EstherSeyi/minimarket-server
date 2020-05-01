@@ -1,6 +1,6 @@
 const admin = {
   email: 'test@theagromall.com',
-  name: 'Felix',
+  name: 'Admin',
   role: 'admin',
   password: 'password',
 };
