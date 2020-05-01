@@ -1,20 +1,18 @@
 import mongoose from 'mongoose';
 
 async function connectMongoDB() {
-  mongoose.set('useNewUrlParser', true);
-  mongoose.set('useFindAndModify', false);
-  mongoose.set('useCreateIndex', true);
-  mongoose.set('useUnifiedTopology', true);
   await mongoose
     .connect(`${process.env.MONGO_URI_TEST}`, {
       useNewUrlParser: true,
       useCreateIndex: true,
+      useFindAndModify: false,
+      useUnifiedTopology: true,
     })
     .catch((err: any) => {
       console.error(err);
-
-      process.exit(1);
+      return;
     });
+
   console.log('Connected to testDB');
 }
 
