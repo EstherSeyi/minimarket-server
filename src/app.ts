@@ -3,11 +3,13 @@ import express from 'express';
 import cors from 'cors';
 import compression from 'compression';
 import morgan from 'morgan';
+import dotenv from 'dotenv';
 
 import authRouter from './routes/auth';
 import dbConnection from './config/db';
 import seed from './seed-db/index';
 
+dotenv.config();
 const app = express();
 
 dbConnection.once('open', function () {
