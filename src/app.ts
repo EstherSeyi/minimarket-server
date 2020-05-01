@@ -10,12 +10,15 @@ import dbConnection from './config/db';
 import seed from './seed-db/index';
 
 dotenv.config();
+
 const app = express();
 
-dbConnection.once('open', function () {
-  seed();
-  console.log('MongoDB database connection established successfully');
-});
+if (process.env.NODE_ENV !== 'test') {
+  dbConnection.once('open', function () {
+    seed();
+    console.log('MongoDB database connection established successfully');
+  });
+}
 
 // Setup Request logging
 const logFormat = process.env.NODE_ENV === 'production' ? 'combined' : 'dev';
