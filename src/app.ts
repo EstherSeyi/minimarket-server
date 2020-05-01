@@ -4,7 +4,7 @@ import cors from 'cors';
 import compression from 'compression';
 import morgan from 'morgan';
 
-import apiRouter from './routes/index';
+import authRouter from './routes/auth';
 import dbConnection from './config/db';
 
 const app = express();
@@ -48,7 +48,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use('/api', apiRouter);
+app.use('/api/v1/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (
