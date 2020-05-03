@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 
 import authRouter from './routes/auth';
+import marketRouter from './routes/market';
 import dbConnection from './config/db';
 import seed from './seed-db/index';
 
@@ -56,6 +57,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/market', marketRouter);
 
 // catch 404 and forward to error handler
 app.use(function (
