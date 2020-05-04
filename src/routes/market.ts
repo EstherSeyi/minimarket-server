@@ -9,5 +9,6 @@ const router = Router();
 router.post('/', auth, market.create);
 router.get('/', auth, market.getAll);
 router.get('/geo', auth, market.getByReverseGeocoding);
+router.get('/:category', auth, market.getByCategory);
 
 export default router;
