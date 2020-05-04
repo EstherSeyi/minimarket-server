@@ -7,5 +7,6 @@ const router = Router();
 
 /* Create Market */
 router.post('/', auth, market.create);
+router.get('/', auth, market.getAll);
 
 export default router;
