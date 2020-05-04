@@ -1,8 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
 
 export interface ICordinates extends mongoose.Document {
-  longitute: String;
-  latitude: String;
+  longitute: string;
+  latitude: string;
 }
 
 const CordinatesSchema: Schema = new Schema({
