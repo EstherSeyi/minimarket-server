@@ -11,5 +11,6 @@ router.get('/', auth, market.getAll);
 router.get('/geo', auth, market.getByReverseGeocoding);
 router.get('/:category', auth, market.getByCategory);
 router.delete('/:name', auth, market.deleteMarket);
+router.put('/', auth, market.updateMarket);
 
 export default router;
