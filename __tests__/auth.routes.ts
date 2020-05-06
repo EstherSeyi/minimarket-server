@@ -5,7 +5,7 @@ import seed from '../testSetup/db/seed';
 const { connectMongoDB, disconnectMongoDB } = require('../testSetup/mongodb');
 
 beforeAll(async () => {
-  await connectMongoDB();
+  await connectMongoDB('usersTest');
 
   await seed();
 });
