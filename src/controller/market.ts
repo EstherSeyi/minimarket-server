@@ -39,8 +39,17 @@ const market = {
         return;
       }
 
+      const { latlng, ...rest } = value;
+
+      const address = await Market.reverseCordinates(latlng);
+
+      const marketData = {
+        address,
+        ...rest,
+      };
+
       //Create market
-      const market = new Market(value);
+      const market = new Market(marketData);
 
       //Get and save cordinates
       market.cordinates = await market.getCordinates();
