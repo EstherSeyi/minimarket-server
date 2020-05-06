@@ -143,7 +143,7 @@ const market = {
   //GET MARKET BY CATEGORY CONTROLLER
 
   getByCategory: async (req: Request, res: Response) => {
-    const { value, error } = categorySchema.validate(req.body);
+    const { value, error } = categorySchema.validate(req.query);
 
     if (error) {
       res.status(httpStatus.BAD_REQUEST).send(
