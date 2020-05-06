@@ -22,7 +22,18 @@ export interface IMarket extends mongoose.Document {
 const MarketSchema: Schema = new Schema({
   name: { type: String, required: true, unique: true },
   description: { type: String, required: true },
-  foodCategory: { type: String, required: true },
+  foodCategory: {
+    type: String,
+    required: true,
+    enum: [
+      'fruits',
+      'sea food',
+      'general groceries',
+      'junk food',
+      'meat',
+      'staples',
+    ],
+  },
   address: { type: String, required: true },
   images: { type: [String], required: true },
   cordinates: {
