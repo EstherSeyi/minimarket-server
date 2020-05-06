@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 
-async function connectMongoDB() {
+async function connectMongoDB(dbname: string) {
   await mongoose
-    .connect(`${process.env.MONGO_URI_TEST}`, {
+    .connect(`${process.env.MONGO_URI_TEST}/${dbname}`, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
@@ -19,7 +19,9 @@ async function connectMongoDB() {
 async function disconnectMongoDB() {
   await mongoose.connection.db.dropDatabase();
 
-  mongoose.connection.close();
+  await mongoose.connection.close();
+
+  // await db.close();
 }
 
 module.exports = {
