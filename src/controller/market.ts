@@ -155,10 +155,14 @@ const market = {
       return;
     }
 
-    const { category } = value;
+    let { searchBy, searchValue } = value;
+
+    if (searchBy === 'foodCategory') {
+      searchValue = searchValue.toLowerCase();
+    }
 
     try {
-      const markets = await Market.find({ foodCategory: category });
+      const markets = await Market.find({ [searchBy]: searchValue });
 
       res.status(httpStatus.OK).send(
         sendResponse({
