@@ -4,7 +4,7 @@ export const marketSchema = joi.object().keys({
   name: joi.string().min(2).max(255).required(),
   description: joi.string().min(6).required(),
   foodCategory: joi.string().min(2).required(),
-  address: joi.string().min(10).required(),
+  latlng: joi.string().required(),
   images: joi.array().items(joi.string()).required(),
   cordinates: joi.object(),
 });
@@ -13,7 +13,8 @@ export const latlngSchema = joi.object().keys({
   latlng: joi.string().required(),
 });
 export const categorySchema = joi.object().keys({
-  category: joi.string().required(),
+  searchBy: joi.string().required(),
+  searchValue: joi.string().required(),
 });
 
 export const updateSchema = joi.object().keys({
@@ -21,7 +22,7 @@ export const updateSchema = joi.object().keys({
   name: joi.string(),
   foodCategory: joi.string(),
   description: joi.string(),
-  address: joi.string(),
+  latlng: joi.string().required(),
   images: joi.array().items(joi.string()),
   cordinates: joi.object(),
 });
