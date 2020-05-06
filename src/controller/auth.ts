@@ -72,7 +72,8 @@ export async function login(req: Request, res: Response) {
   }
 }
 
-const secretToken = `${process.env.ACCESS_TOKEN_SECRET}`;
 function signToken(user: IUser) {
-  return jwt.sign({ email: user.email }, secretToken);
+  return jwt.sign({ email: user.email }, `${process.env.ACCESS_TOKEN_SECRET}`, {
+    expiresIn: '1d',
+  });
 }
