@@ -79,7 +79,7 @@ const market = {
   //GET MARKET BY REVERSE GEOCODING CONTROLLER
 
   getByReverseGeocoding: async (req: Request, res: Response) => {
-    const { value, error } = latlngSchema.validate(req.params);
+    const { value, error } = latlngSchema.validate(req.query);
 
     if (error) {
       res.status(httpStatus.BAD_REQUEST).send(
