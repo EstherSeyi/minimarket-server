@@ -1,12 +1,8 @@
 import mongoose, { Schema, Model } from 'mongoose';
-import {
-  Client,
-  LatLng,
-  DistanceMatrixResponse,
-} from '@googlemaps/google-maps-services-js';
+import { Client, LatLng } from '@googlemaps/google-maps-services-js';
 
 import Cordinates, { ICordinates } from './Cordinates';
-// import { Origin } from '../types/index';
+import reduced, { getNearestAddress } from '../utils/reduced';
 
 export interface IMarket extends mongoose.Document {
   name: String;
@@ -63,6 +59,10 @@ MarketSchema.methods = {
   },
 };
 MarketSchema.statics = {
+  /**========================
+   * REVERSE CORDINATES METHOD
+   * ==========================*/
+
   reverseCordinates: async function (input: string) {
     const client = new Client();
 
@@ -75,6 +75,10 @@ MarketSchema.statics = {
 
     return res.data.results[0].formatted_address;
   },
+
+  /**========================
+   * COMPUT NEAREST MARKET METHOD
+   * ==========================*/
 
   computeNearestMarket: async function (origin: LatLng) {
     const client = new Client();
@@ -91,7 +95,6 @@ MarketSchema.statics = {
     });
 
     const destinations = await Promise.all(marketAddresses);
-
     const response = await client.distancematrix({
       params: {
         key: `${process.env.GOOGLE_API_KEY}`,
@@ -100,43 +103,19 @@ MarketSchema.statics = {
       },
     });
 
-    interface ClosestDistance {
-      distance: { value: number };
-      duration: {};
-      status: string;
-      index: number;
-    }
-    // const allAddress = response.data.destination_addresses;
-    const distances = response.data.rows[0].elements;
-
-    console.log('DISTANCES', distances);
-
-    const closestMarket = distances.reduce<ClosestDistance>(
-      (total, item, index) => {
-        console.log(total);
-        let closest = total;
-        if (closest.distance) {
-          if (item.distance.value < closest.distance.value) {
-            closest = { ...item, index };
-          }
-        }
-
-        return closest;
-      },
-      <ClosestDistance>{},
+    const reducedToObject = reduced(
+      response.data.destination_addresses,
+      response.data.rows[0].elements,
     );
 
-    console.log(response.data, 'RESPONSE');
-    console.log(response.data.rows[0].elements, 'ELEMENTS');
+    const nearestAddress = getNearestAddress(reducedToObject);
 
-    console.log(closestMarket, 'MARKET');
-
-    const distancesOfAllMarkets = response.data.rows[0].elements.map((item) => {
-      return item.distance.value;
-    });
-
-    return Math.min(...distancesOfAllMarkets);
+    return nearestAddress;
   },
+
+  /**========================
+   * GET CORDINATES FROM ADDRESS CONTROLLER
+   * ==========================*/
 
   getAddressCordinates: async function (address: string) {
     const client = new Client();
@@ -162,7 +141,9 @@ MarketSchema.statics = {
 
 export interface IMarketModel extends Model<IMarket> {
   reverseCordinates: (input: string) => Promise<string>;
-  computeNearestMarket: (origin: LatLng) => Promise<DistanceMatrixResponse>;
+  computeNearestMarket: (
+    origin: LatLng,
+  ) => Promise<{ minDist: string; minVal: number }>;
   getAddressCordinates: (address: string) => Promise<LatLng>;
 }
 
