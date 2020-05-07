@@ -10,6 +10,7 @@ import {
   categorySchema,
   updateNameSchema,
   deleteMarketsSchema,
+  singleMarketSchema,
 } from '../validation/market';
 
 const market = {
@@ -163,6 +164,15 @@ const market = {
 
     try {
       const markets = await Market.find({ [searchBy]: searchValue });
+
+      if (!markets) {
+        res.status(httpStatus.NO_CONTENT).send(
+          sendResponse({
+            message: 'does not exixt!',
+          }),
+        );
+        return;
+      }
 
       res.status(httpStatus.OK).send(
         sendResponse({
@@ -343,6 +353,57 @@ const market = {
         sendResponse({
           message: 'could not update market name',
           error: error.message,
+        }),
+      );
+      return;
+    }
+  },
+
+  getSingleMarket: async (req: Request, res: Response) => {
+    const { value, error } = singleMarketSchema.validate(req.query);
+
+    if (error) {
+      res.status(httpStatus.BAD_REQUEST).send(
+        sendResponse({
+          message: 'provide valid id',
+          error,
+        }),
+      );
+      return;
+    }
+
+    const { id } = value;
+
+    try {
+      const market = await Market.findById({ _id: id })
+        .populate('cordinates')
+        .select('name foodCategory description images cordinates address _id');
+
+      if (!market) {
+        res.status(httpStatus.NO_CONTENT).send(
+          sendResponse({
+            message: 'Market does not exixt!',
+          }),
+        );
+        return;
+      }
+
+      const geocode = {
+        lat: parseFloat(market!.cordinates.latitude),
+        lng: parseFloat(market!.cordinates.longitute),
+      };
+
+      res.status(httpStatus.OK).send(
+        sendResponse({
+          message: 'success',
+          payload: { market, geocode },
+        }),
+      );
+    } catch (error) {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).send(
+        sendResponse({
+          message: 'could not find market',
+          error,
         }),
       );
       return;
