@@ -33,3 +33,7 @@ export const updateNameSchema = joi.object().keys({
 export const deleteMarketsSchema = joi.object().keys({
   markets: joi.array().items(joi.string()).required(),
 });
+
+export const singleMarketSchema = joi.object().keys({
+  id: joi.string().required(),
+});
