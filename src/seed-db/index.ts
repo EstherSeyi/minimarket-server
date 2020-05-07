@@ -1,5 +1,7 @@
 import User from '../models/User';
-import user from '../seed-db/admin';
+import Market from '../models/Market';
+import user from './admin';
+import markets from './markets';
 
 const cleanDb = async () => {
   try {
@@ -20,12 +22,48 @@ export async function createAdmin() {
   }
 }
 
+export const seedMarkets = async () => {
+  try {
+    // console.log(markets, 'Markets');
+
+    const allMarkets = markets.map(async (market) => {
+      if (await Market.findOne({ name: market.name })) {
+        return;
+      }
+
+      const { latlng, ...rest } = market;
+
+      const address = await Market.reverseCordinates(latlng);
+
+      const marketData = {
+        address,
+        ...rest,
+      };
+
+      //Create market
+      const newMarket = new Market(marketData);
+
+      //Get and save cordinates
+      newMarket.cordinates = await newMarket.getCordinates();
+
+      //Save market
+      return await newMarket.save();
+    });
+    const res = await Promise.all(allMarkets);
+
+    return res;
+  } catch (err) {
+    return err;
+  }
+};
+
 const seed = async () => {
   try {
     await cleanDb();
 
     await createAdmin();
-    return console.log('DB has been seeded');
+    const markets = await seedMarkets();
+    return console.log(`DB has been seeded with ${markets.length} markets`);
   } catch (error) {
     console.log(error);
   }
