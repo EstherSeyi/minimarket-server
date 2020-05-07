@@ -14,5 +14,6 @@ router.get('/geo', market.getByReverseGeocoding);
 router.get('/category', market.getByCategory);
 router.get('/nearest', market.getNearestMarket);
 router.put('/name', auth, market.updateMarketName);
+router.get('/single', market.getSingleMarket);
 
 export default router;
