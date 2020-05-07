@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "build":"tsc",
     "dev": "tsc --watch & nodemon bin/www",
     "test": "jest"
   },
