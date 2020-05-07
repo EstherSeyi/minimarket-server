@@ -114,7 +114,7 @@ MarketSchema.statics = {
   },
 
   /**========================
-   * GET CORDINATES FROM ADDRESS CONTROLLER
+   * GET CORDINATES FROM ADDRESS METHOD
    * ==========================*/
 
   getAddressCordinates: async function (address: string) {
