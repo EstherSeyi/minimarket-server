@@ -24,7 +24,7 @@ const market = {
     if (error) {
       res.status(httpStatus.BAD_REQUEST).send(
         sendResponse({
-          message: 'Please provide valid login credentials',
+          message: 'Please provide valid market data',
           error,
         }),
       );
