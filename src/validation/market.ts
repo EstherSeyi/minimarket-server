@@ -37,3 +37,6 @@ export const deleteMarketsSchema = joi.object().keys({
 export const singleMarketSchema = joi.object().keys({
   id: joi.string().required(),
 });
+export const nearestMarketSchema = joi.object().keys({
+  market: joi.string().required() || joi.object().required(),
+});
