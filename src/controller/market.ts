@@ -11,6 +11,7 @@ import {
   updateNameSchema,
   deleteMarketsSchema,
   singleMarketSchema,
+  nearestMarketSchema,
 } from '../validation/market';
 
 const market = {
@@ -271,26 +272,53 @@ const market = {
     }
   },
 
-  //GET NEAREST MARKET CONTROLLER
+  /**========================
+   * GET NEAREST MARKET CONTROLLER
+   * ==========================*/
 
   getNearestMarket: async (req: Request, res: Response) => {
-    const { market } = req.body;
+    const { value, error } = nearestMarketSchema.validate(req.query);
+
+    if (error) {
+      res.status(httpStatus.BAD_REQUEST).send(
+        sendResponse({
+          message: 'Please provide valid loacation detail',
+          error,
+        }),
+      );
+      return;
+    }
 
     try {
+      const { market } = value;
+
       let cordinates;
 
-      if (typeof market === 'string') {
+      if (typeof market !== 'object') {
         cordinates = await Market.getAddressCordinates(market);
       } else {
         cordinates = market;
       }
 
-      const nearest = await Market.computeNearestMarket(cordinates);
+      const nearestAddress = await Market.computeNearestMarket(cordinates);
+
+      const nearestMarket = await Market.findOne({
+        address: nearestAddress.minDist,
+      });
+
+      if (!nearestMarket) {
+        res.status(httpStatus.NO_CONTENT).send(
+          sendResponse({
+            message: 'no close bye market found!',
+          }),
+        );
+        return;
+      }
 
       res.status(httpStatus.OK).send(
         sendResponse({
           message: 'success',
-          payload: nearest,
+          payload: [nearestMarket],
         }),
       );
     } catch (error) {
