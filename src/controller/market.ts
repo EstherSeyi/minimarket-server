@@ -15,7 +15,9 @@ import {
 } from '../validation/market';
 
 const market = {
-  //CREATE MARKET CONTROLLER
+  /**========================
+   * CREATE MARKET CONTROLLER
+   * ==========================*/
   create: async (req: Request, res: Response) => {
     const { value, error } = marketSchema.validate(req.body);
 
@@ -78,7 +80,9 @@ const market = {
     }
   },
 
-  //GET MARKET BY REVERSE GEOCODING CONTROLLER
+  /**========================
+   *GET MARKET BY REVERSE GEOCODING CONTROLLER
+   * ==========================*/
 
   getByReverseGeocoding: async (req: Request, res: Response) => {
     const { value, error } = latlngSchema.validate(req.query);
@@ -119,7 +123,9 @@ const market = {
     }
   },
 
-  //GET ALL MARKETS CONTROLLER
+  /**========================
+   * GET ALL MARKETS CONTROLLER
+   * ==========================*/
   getAll: async (_req: Request, res: Response) => {
     try {
       const markets = await Market.find().select({ __v: 0 });
@@ -142,7 +148,9 @@ const market = {
     }
   },
 
-  //GET MARKET BY CATEGORY CONTROLLER
+  /**========================
+   * GET MARKET BY CATEGORY OR MARKET NAME CONTROLLER
+   * ==========================*/
 
   getByCategory: async (req: Request, res: Response) => {
     const { value, error } = categorySchema.validate(req.query);
@@ -192,7 +200,10 @@ const market = {
     }
   },
 
-  //DELETE MARKET CONTROLLER
+  /**========================
+   * DELETE MARKET CONTROLLER
+   * ==========================*/
+
   deleteMarkets: async (req: Request, res: Response) => {
     const { value, error } = deleteMarketsSchema.validate(req.body);
 
@@ -234,7 +245,10 @@ const market = {
     }
   },
 
-  //UPDATE MARKET CONTROLLER
+  /**========================
+   * UPDATE MARKET CONTROLLER
+   * ==========================*/
+
   updateMarket: async (req: Request, res: Response) => {
     const { value, error } = updateSchema.validate(req.body);
 
@@ -332,7 +346,9 @@ const market = {
     }
   },
 
-  //UPDATE MARKET NAME CONTROLLER
+  /**========================
+   * UPDATE MARKET NAME CONTROLLER
+   * ==========================*/
 
   updateMarketName: async (req: Request, res: Response) => {
     const { value, error } = updateNameSchema.validate(req.body);
@@ -386,6 +402,10 @@ const market = {
       return;
     }
   },
+
+  /**========================
+   * GET SINGLE MARKET CONTROLLER
+   * ==========================*/
 
   getSingleMarket: async (req: Request, res: Response) => {
     const { value, error } = singleMarketSchema.validate(req.query);
